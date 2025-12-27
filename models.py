@@ -79,7 +79,7 @@ def sap_xep_vi_tri_tren_luoi(danh_sach_nut, so_luong):
 # Tao do thi ngau nhien
 def tao_do_thi_ngau_nhien(co_huong=False):
     danh_sach_nut = []
-    so_luong = random.randint(100, 100) 
+    so_luong = random.randint(10, 100) 
     for i in range(so_luong):
         danh_sach_nut.append(Nut(i, 0, 0))
     

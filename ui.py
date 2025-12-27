@@ -402,8 +402,6 @@ def ve_bang_ket_qua(man_hinh, lich_su, cuon_doc):
     font_kq = pygame.font.SysFont('Arial', 15, bold=True)
     font_dong = pygame.font.SysFont('Arial', 13)
     
-    # KHONG DAU, DIEU CHINH DO RONG COT DE KHONG BI DE CHU
-    # Tang cot Mo (Open) va Thong Tin
     cac_cot = [("Buoc", 35), ("Dinh", 40), ("Mo", 145), ("Dong", 90), ("Thong Tin", 140)]
     
     man_hinh.set_clip(pygame.Rect(x, 35, rong_bang, H - 35))
@@ -448,18 +446,25 @@ def ve_bang_ket_qua(man_hinh, lich_su, cuon_doc):
     return tong_chieu_cao
 
 def hien_cua_so_so_sanh(man_hinh, kq_bfs, kq_dfs, kq_dijk):
-    W, H = man_hinh.get_size(); w = 900; h = 500; x = (W-w)//2; y = (H-h)//2
-    nen_mo = pygame.Surface((W, H)); nen_mo.set_alpha(150); nen_mo.fill(0); man_hinh.blit(nen_mo, (0,0))
+    W, H = man_hinh.get_size()
+    w = 900
+    h = 600 # Tang chieu cao de chua duoc noi dung
+    x = (W-w)//2
+    y = (H-h)//2
+    
+    nen_mo = pygame.Surface((W, H))
+    nen_mo.set_alpha(150)
+    nen_mo.fill(0)
+    man_hinh.blit(nen_mo, (0,0))
     
     r = pygame.Rect(x, y, w, h)
     pygame.draw.rect(man_hinh, MAU_TRANG, r, border_radius=12)
     pygame.draw.rect(man_hinh, MAU_VIEN_BANG, r, 3, border_radius=12)
     
     fL = pygame.font.SysFont('Arial', 24, bold=True)
-    fS = pygame.font.SysFont('Arial', 17)
+    fS = pygame.font.SysFont('Arial', 16)
     fBold = pygame.font.SysFont('Arial', 17, bold=True)
     
-    # KHONG DAU
     t = fL.render("SO SANH: BFS vs DFS vs DIJKSTRA", True, MAU_DO)
     man_hinh.blit(t, t.get_rect(center=(W//2, y+40)))
     
@@ -491,14 +496,33 @@ def hien_cua_so_so_sanh(man_hinh, kq_bfs, kq_dfs, kq_dijk):
     pygame.draw.line(man_hinh, MAU_XAM, (x+20, cy+10), (x+w-20, cy+10), 1)
     cy += 20
     
-    def rut_gon(t, l=85): return t[:l]+"..." if len(t)>l else t
+    # --- PHAN HIEN THI DUONG DI (TU DONG XUONG DONG) ---
+    chieu_rong_chu = w - 60
     
-    man_hinh.blit(fS.render(f"BFS: {rut_gon(kq_bfs['duong_di'])}", True, MAU_XANH_DUONG), (x+30, cy))
-    man_hinh.blit(fS.render(f"DFS: {rut_gon(kq_dfs['duong_di'])}", True, MAU_TIM), (x+30, cy+30))
-    man_hinh.blit(fS.render(f"Dijkstra: {rut_gon(kq_dijk['duong_di'])}", True, MAU_XANH_LA), (x+30, cy+60))
+    txt_bfs = f"BFS: {kq_bfs['duong_di']}"
+    cac_dong_bfs = cat_dong_van_ban(txt_bfs, fS, chieu_rong_chu)
+    for line in cac_dong_bfs:
+        man_hinh.blit(fS.render(line, True, MAU_XANH_DUONG), (x+30, cy))
+        cy += 22
+    cy += 10 
     
+    txt_dfs = f"DFS: {kq_dfs['duong_di']}"
+    cac_dong_dfs = cat_dong_van_ban(txt_dfs, fS, chieu_rong_chu)
+    for line in cac_dong_dfs:
+        man_hinh.blit(fS.render(line, True, MAU_TIM), (x+30, cy))
+        cy += 22
+    cy += 10
+    
+    txt_dijk = f"Dijkstra: {kq_dijk['duong_di']}"
+    cac_dong_dijk = cat_dong_van_ban(txt_dijk, fS, chieu_rong_chu)
+    for line in cac_dong_dijk:
+        man_hinh.blit(fS.render(line, True, MAU_XANH_LA), (x+30, cy))
+        cy += 22
+
     nut_dong = pygame.Rect(x+(w-100)//2, y+h-60, 100, 40)
-    pygame.draw.rect(man_hinh, MAU_DO, nut_dong, border_radius=8); pygame.draw.rect(man_hinh, MAU_DEN, nut_dong, 2, border_radius=8)
+    pygame.draw.rect(man_hinh, MAU_DO, nut_dong, border_radius=8)
+    pygame.draw.rect(man_hinh, MAU_DEN, nut_dong, 2, border_radius=8)
     txt = pygame.font.SysFont('Arial', 18, bold=True).render("Dong", True, MAU_TRANG)
     man_hinh.blit(txt, txt.get_rect(center=nut_dong.center))
+    
     return nut_dong

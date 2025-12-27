@@ -3,7 +3,7 @@ import pygame
 import sys
 import math
 import os
-import time  # <--- MOI THEM: De do thoi gian chay
+import time  
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog
@@ -19,12 +19,12 @@ def chay_thong_ke(danh_sach_nut):
     for n in danh_sach_nut: n.dat_lai_trang_thai()
     bo_sinh = chay_bfs(danh_sach_nut[0])
     buoc1 = 0
-    start_time = time.perf_counter() # Bat dau do
+    start_time = time.perf_counter() 
     try:
         while True: next(bo_sinh); buoc1 += 1
     except StopIteration: pass
-    end_time = time.perf_counter() # Ket thuc do
-    t1 = (end_time - start_time) * 1000 # Doi sang ms
+    end_time = time.perf_counter() 
+    t1 = (end_time - start_time) * 1000 
     cp1, duong1 = lay_ket_qua_duong_di(danh_sach_nut)
     
     # --- DFS ---
@@ -51,11 +51,9 @@ def chay_thong_ke(danh_sach_nut):
     t3 = (end_time - start_time) * 1000
     cp3, duong3 = lay_ket_qua_duong_di(danh_sach_nut)
     
-    # Tra ve them t1, t2, t3
     return buoc1, cp1, duong1, t1, buoc2, cp2, duong2, t2, buoc3, cp3, duong3, t3
 
 def tao_noi_dung_bao_cao(danh_sach_nut):
-    # 1. Chuan bi du lieu tho de tai dung
     du_lieu = [str(len(danh_sach_nut))]
     for u in danh_sach_nut:
         for v, w in u.danh_sach_ke: du_lieu.append(f"{u.ma_so} {v.ma_so} {w}")
@@ -66,13 +64,9 @@ def tao_noi_dung_bao_cao(danh_sach_nut):
     txt += "========================================================\n"
     txt += f"Thoi gian xuat: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
     
-    # Ham format bang so sanh
     def tao_bang_so_sanh(tieu_de_do_thi, V, E, ket_qua_chay):
         s1, c1, p1, t1, s2, c2, p2, t2, s3, c3, p3, t3 = ket_qua_chay
         
-        # Tinh do phuc tap ly thuyet
-        # BFS/DFS: O(V + E)
-        # Dijkstra (Heap): O((V + E) * log(V))
         val_bfs_dfs = V + E
         val_dijkstra = (V + E) * math.log2(V) if V > 0 else 0
         
@@ -82,19 +76,10 @@ def tao_noi_dung_bao_cao(danh_sach_nut):
         bang += f"{'Tieu chi':<20} | {'BFS (Queue)':<22} | {'DFS (Stack)':<22} | {'Dijkstra (Heap)':<22}\n"
         bang += "-"*100 + "\n"
         
-        # Dong 1: Do phuc tap ly thuyet
         bang += f"{'Do phuc tap (Big O)':<20} | {'O(V + E)':<22} | {'O(V + E)':<22} | {'O((V+E)logV)':<22}\n"
-        
-        # Dong 2: Gia tri ly thuyet (uoc tinh)
         bang += f"{'Gia tri Ly thuyet':<20} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_dijkstra:.1f} phep tinh':<22}\n"
-        
-        # Dong 3: Thoi gian chay (ms)
         bang += f"{'Thoi gian chay':<20} | {f'{t1:.4f} ms':<22} | {f'{t2:.4f} ms':<22} | {f'{t3:.4f} ms':<22}\n"
-        
-        # Dong 4: So buoc thuc te
         bang += f"{'So buoc mo phong':<20} | {f'{s1} buoc':<22} | {f'{s2} buoc':<22} | {f'{s3} buoc':<22}\n"
-        
-        # Dong 5: Tong chi phi duong di
         bang += f"{'Tong chi phi':<20} | {f'{c1}':<22} | {f'{c2}':<22} | {f'{c3}':<22}\n"
         
         bang += "-"*100 + "\n"
@@ -103,15 +88,13 @@ def tao_noi_dung_bao_cao(danh_sach_nut):
         bang += f"Duong di Dijkstra: {p3}\n\n"
         return bang
 
-    # --- 1. PHAN TICH CO HUONG ---
     g1 = phan_tich_van_ban(du_lieu_tho)
     if g1:
         V = len(g1)
-        E = sum([len(n.danh_sach_ke) for n in g1]) # Tong so canh
+        E = sum([len(n.danh_sach_ke) for n in g1])
         kq1 = chay_thong_ke(g1)
         txt += tao_bang_so_sanh("1. DO THI CO HUONG (Directed)", V, E, kq1)
         
-    # --- 2. PHAN TICH VO HUONG ---
     g2 = phan_tich_van_ban(du_lieu_tho)
     if g2:
         chuyen_thanh_vo_huong(g2)
@@ -171,13 +154,8 @@ def main():
     trang_thai = CHE_DO_CHINH
     co_huong = True 
     danh_sach_nut = tao_do_thi_ngau_nhien(co_huong=co_huong)
-    # --- BIEN LUU TRU DE KHOI PHUC ---
-    # Khi chuyen sang Vo Huong, ta se luu lai ban Co Huong vao day
-    # De khi chuyen lai Co Huong, ta lay ra dung, khong bi doi chieu
     du_lieu_du_phong = None 
     
-    # Tao cac nut bam KHONG DAU
-    # Index: 0=BFS, 1=DFS, 2=Dijkstra, 3=SoSanh, 4=Kieu, 5=LamMoi, 6=NhapTay, 7=XuatBC, 8=ChonFile
     ds_nut_bam = [
         NutBam(30, 580, 70, 40, "BFS", MAU_XANH_DUONG),
         NutBam(110, 580, 70, 40, "DFS", MAU_TIM),
@@ -194,11 +172,11 @@ def main():
     ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; nut_dang_keo = None; dang_di_chuyen_man_hinh = False; chuot_cu = (0, 0)
     hien_bang_so_sanh = False
     kq_bfs = kq_dfs = kq_dijk = None
+    rect_dong = None # Bien luu vi tri nut dong
 
     hop_nhap = HopNhapLieu(50, 80, 400, 500, font_nhap)
     hop_nhap.dat_noi_dung("5\n0 1 5\n1 2 3\n2 3 1\n3 4 7\n4 0 2")
     
-    # KHONG DAU
     nut_nap = NutBam(50, 600, 120, 40, "NAP DO THI", MAU_XANH_LA)
     nut_random = NutBam(185, 600, 130, 40, "NGAU NHIEN", MAU_TIM)
     nut_quay_lai = NutBam(330, 600, 120, 40, "QUAY LAI", MAU_DO)
@@ -233,10 +211,13 @@ def main():
         man_hinh.blit(font.render(lbl, True, MAU_DEN), (30, H - 140))
         
         chieu_cao_bang = ve_bang_ket_qua(man_hinh, lich_su_chay, cuon_bang)
-        if hien_bang_so_sanh and kq_bfs: hien_cua_so_so_sanh(man_hinh, kq_bfs, kq_dfs, kq_dijk)
+        
+        rect_nut_dong_local = None
+        if hien_bang_so_sanh and kq_bfs: 
+            rect_nut_dong_local = hien_cua_so_so_sanh(man_hinh, kq_bfs, kq_dfs, kq_dijk)
         
         pygame.display.flip()
-        return chieu_cao_bang
+        return chieu_cao_bang, rect_nut_dong_local
 
     def ve_man_hinh_nhap():
         man_hinh.fill(MAU_NEN_NHAP)
@@ -272,7 +253,7 @@ def main():
                             danh_sach_nut = g; luu_lich_su_nhap(txt); cap_nhat_giao_dien_lich_su()
                             bo_sinh_du_lieu = None; lich_su_chay = []; duong_di_ket_qua = []
                             ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; trang_thai = CHE_DO_CHINH
-                            du_lieu_du_phong = None # Reset backup
+                            du_lieu_du_phong = None 
                         else: print("Loi dinh dang!")
                     elif nut_random.duoc_nhan(e.pos): hop_nhap.dat_noi_dung(tao_du_lieu_ngau_nhien_dang_chu())
                     else:
@@ -281,6 +262,14 @@ def main():
                             if kiem_tra.collidepoint(e.pos): hop_nhap.dat_noi_dung(b.gia_tri_an); break
 
             elif trang_thai == CHE_DO_CHINH:
+                if hien_bang_so_sanh:
+                    if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
+                        if rect_dong and rect_dong.collidepoint(e.pos):
+                            hien_bang_so_sanh = False
+                            for n in danh_sach_nut: n.dat_lai_trang_thai() 
+                            duong_di_ket_qua = []
+                    continue 
+                
                 mx, my = pygame.mouse.get_pos()
                 wx = (mx - lech_x) / ti_le_zoom
                 wy = (my - lech_y) / ti_le_zoom
@@ -290,13 +279,6 @@ def main():
                 else:
                     for n in danh_sach_nut:
                         if math.hypot(wx - n.x, wy - n.y) <= BAN_KINH_NUT: nut_hover = n; break
-
-                if hien_bang_so_sanh:
-                    if e.type == pygame.MOUSEBUTTONDOWN or e.type == pygame.KEYDOWN:
-                        hien_bang_so_sanh = False; 
-                        for n in danh_sach_nut: n.dat_lai_trang_thai() 
-                        duong_di_ket_qua = []
-                    continue 
 
                 if e.type == pygame.VIDEORESIZE: man_hinh = pygame.display.set_mode((e.w, e.h), pygame.RESIZABLE)
                 
@@ -310,7 +292,6 @@ def main():
                 if e.type == pygame.MOUSEBUTTONDOWN:
                     if e.button == 1: 
                         da_click_nut = False
-                        # FIX: DUNG INDEX DE CHECK NUT CHO CHAC CHAN
                         for i, b in enumerate(ds_nut_bam):
                             if b.duoc_nhan(e.pos):
                                 da_click_nut = True
@@ -321,16 +302,14 @@ def main():
                                     bo_sinh_du_lieu = None; lich_su_chay = []; cuon_bang = 0; duong_di_ket_qua = []
                                     ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; du_lieu_du_phong = None
                                 
-                                # 4: Kieu (Co Huong <-> Vo Huong) - FIX LOI DOI CHIEU MUI TEN
+                                # 4: Kieu (Co Huong <-> Vo Huong)
                                 elif i == 4:
                                     co_huong = not co_huong
-                                    if not co_huong: # Chuyen sang Vo Huong
-                                        # Luu lai trang thai Co Huong hien tai
+                                    if not co_huong: 
                                         du_lieu_du_phong = sao_chep_do_thi(danh_sach_nut)
                                         danh_sach_nut = chuyen_thanh_vo_huong(danh_sach_nut)
                                         ds_nut_bam[4].noi_dung = "Kieu: Vo Huong"
-                                    else: # Chuyen sang Co Huong
-                                        # Khoi phuc lai trang thai cu (neu co)
+                                    else: 
                                         if du_lieu_du_phong:
                                             danh_sach_nut = khoi_phuc_do_thi(du_lieu_du_phong, danh_sach_nut)
                                         else:
@@ -374,7 +353,7 @@ def main():
                                             danh_sach_nut = gn; co_huong = mode
                                             ds_nut_bam[4].noi_dung = "Kieu: Co Huong" if co_huong else "Kieu: Vo Huong"
                                             bo_sinh_du_lieu = None; lich_su_chay = []; duong_di_ket_qua = []
-                                            du_lieu_du_phong = None # Reset backup
+                                            du_lieu_du_phong = None
                                             lich_su_chay.append(f">> DA NAP: {os.path.basename(duong_dan)}")
                                         else: lich_su_chay.append(">> FILE LOI!")
                                     else: lich_su_chay.append(">> DA HUY")
@@ -415,7 +394,7 @@ def main():
                         lich_su_chay.append(f"KET QUA: {p} (Chi phi: {c})"); cuon_bang = -99999
 
         if trang_thai == CHE_DO_CHINH:
-            cao_bang = ve_man_hinh_chinh(nut_hover if trang_thai == CHE_DO_CHINH else None)
+            cao_bang, rect_dong = ve_man_hinh_chinh(nut_hover if trang_thai == CHE_DO_CHINH else None)
             _, ch = man_hinh.get_size()
             if cao_bang < (ch - 40): cuon_bang = 0
             elif cuon_bang < -(cao_bang - (ch-40) + 20): cuon_bang = -(cao_bang - (ch-40) + 20)
