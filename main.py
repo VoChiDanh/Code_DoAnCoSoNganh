@@ -3,6 +3,7 @@ import pygame
 import sys
 import math
 import os
+import time  # <--- MOI THEM: De do thoi gian chay
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog
@@ -14,61 +15,115 @@ from algorithms import chay_bfs, chay_dijkstra, chay_dfs, lay_ket_qua_duong_di
 # --- Logic tao bao cao ---
 
 def chay_thong_ke(danh_sach_nut):
-    # BFS
+    # --- BFS ---
     for n in danh_sach_nut: n.dat_lai_trang_thai()
     bo_sinh = chay_bfs(danh_sach_nut[0])
     buoc1 = 0
+    start_time = time.perf_counter() # Bat dau do
     try:
         while True: next(bo_sinh); buoc1 += 1
     except StopIteration: pass
+    end_time = time.perf_counter() # Ket thuc do
+    t1 = (end_time - start_time) * 1000 # Doi sang ms
     cp1, duong1 = lay_ket_qua_duong_di(danh_sach_nut)
     
-    # DFS
+    # --- DFS ---
     for n in danh_sach_nut: n.dat_lai_trang_thai()
     bo_sinh = chay_dfs(danh_sach_nut[0])
     buoc2 = 0
+    start_time = time.perf_counter()
     try:
         while True: next(bo_sinh); buoc2 += 1
     except StopIteration: pass
+    end_time = time.perf_counter()
+    t2 = (end_time - start_time) * 1000
     cp2, duong2 = lay_ket_qua_duong_di(danh_sach_nut)
     
-    # Dijkstra
+    # --- Dijkstra ---
     for n in danh_sach_nut: n.dat_lai_trang_thai()
     bo_sinh = chay_dijkstra(danh_sach_nut[0])
     buoc3 = 0
+    start_time = time.perf_counter()
     try:
         while True: next(bo_sinh); buoc3 += 1
     except StopIteration: pass
+    end_time = time.perf_counter()
+    t3 = (end_time - start_time) * 1000
     cp3, duong3 = lay_ket_qua_duong_di(danh_sach_nut)
     
-    return buoc1, cp1, duong1, buoc2, cp2, duong2, buoc3, cp3, duong3
+    # Tra ve them t1, t2, t3
+    return buoc1, cp1, duong1, t1, buoc2, cp2, duong2, t2, buoc3, cp3, duong3, t3
 
 def tao_noi_dung_bao_cao(danh_sach_nut):
+    # 1. Chuan bi du lieu tho de tai dung
     du_lieu = [str(len(danh_sach_nut))]
     for u in danh_sach_nut:
         for v, w in u.danh_sach_ke: du_lieu.append(f"{u.ma_so} {v.ma_so} {w}")
     du_lieu_tho = "\n".join(du_lieu)
     
-    txt = "BAO CAO KET QUA\n"
-    txt += f"Thoi gian: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
-    txt += "-"*50 + "\n\n"
+    txt = "========================================================\n"
+    txt += "              BAO CAO PHAN TICH THUAT TOAN              \n"
+    txt += "========================================================\n"
+    txt += f"Thoi gian xuat: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
     
-    def dinh_dang(ten, s, c, p):
-        return f"[{ten}]\n  - So buoc: {s} | Chi phi: {c} | Duong di: {p}\n"
+    # Ham format bang so sanh
+    def tao_bang_so_sanh(tieu_de_do_thi, V, E, ket_qua_chay):
+        s1, c1, p1, t1, s2, c2, p2, t2, s3, c3, p3, t3 = ket_qua_chay
+        
+        # Tinh do phuc tap ly thuyet
+        # BFS/DFS: O(V + E)
+        # Dijkstra (Heap): O((V + E) * log(V))
+        val_bfs_dfs = V + E
+        val_dijkstra = (V + E) * math.log2(V) if V > 0 else 0
+        
+        bang = f"--- {tieu_de_do_thi} ---\n"
+        bang += f"Thong so: So Dinh (V) = {V} | So Canh (E) = {E}\n"
+        bang += "-"*100 + "\n"
+        bang += f"{'Tieu chi':<20} | {'BFS (Queue)':<22} | {'DFS (Stack)':<22} | {'Dijkstra (Heap)':<22}\n"
+        bang += "-"*100 + "\n"
+        
+        # Dong 1: Do phuc tap ly thuyet
+        bang += f"{'Do phuc tap (Big O)':<20} | {'O(V + E)':<22} | {'O(V + E)':<22} | {'O((V+E)logV)':<22}\n"
+        
+        # Dong 2: Gia tri ly thuyet (uoc tinh)
+        bang += f"{'Gia tri Ly thuyet':<20} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_dijkstra:.1f} phep tinh':<22}\n"
+        
+        # Dong 3: Thoi gian chay (ms)
+        bang += f"{'Thoi gian chay':<20} | {f'{t1:.4f} ms':<22} | {f'{t2:.4f} ms':<22} | {f'{t3:.4f} ms':<22}\n"
+        
+        # Dong 4: So buoc thuc te
+        bang += f"{'So buoc mo phong':<20} | {f'{s1} buoc':<22} | {f'{s2} buoc':<22} | {f'{s3} buoc':<22}\n"
+        
+        # Dong 5: Tong chi phi duong di
+        bang += f"{'Tong chi phi':<20} | {f'{c1}':<22} | {f'{c2}':<22} | {f'{c3}':<22}\n"
+        
+        bang += "-"*100 + "\n"
+        bang += f"Duong di BFS     : {p1}\n"
+        bang += f"Duong di DFS     : {p2}\n"
+        bang += f"Duong di Dijkstra: {p3}\n\n"
+        return bang
 
-    txt += "--- 1. CO HUONG ---\n"
+    # --- 1. PHAN TICH CO HUONG ---
     g1 = phan_tich_van_ban(du_lieu_tho)
     if g1:
-        s1, c1, p1, s2, c2, p2, s3, c3, p3 = chay_thong_ke(g1)
-        txt += dinh_dang("BFS", s1, c1, p1) + dinh_dang("DFS", s2, c2, p2) + dinh_dang("Dijkstra", s3, c3, p3)
+        V = len(g1)
+        E = sum([len(n.danh_sach_ke) for n in g1]) # Tong so canh
+        kq1 = chay_thong_ke(g1)
+        txt += tao_bang_so_sanh("1. DO THI CO HUONG (Directed)", V, E, kq1)
         
-    txt += "\n--- 2. VO HUONG ---\n"
+    # --- 2. PHAN TICH VO HUONG ---
     g2 = phan_tich_van_ban(du_lieu_tho)
     if g2:
         chuyen_thanh_vo_huong(g2)
-        s1, c1, p1, s2, c2, p2, s3, c3, p3 = chay_thong_ke(g2)
-        txt += dinh_dang("BFS", s1, c1, p1) + dinh_dang("DFS", s2, c2, p2) + dinh_dang("Dijkstra", s3, c3, p3)
+        V = len(g2)
+        E_vo_huong = sum([len(n.danh_sach_ke) for n in g2]) 
+        kq2 = chay_thong_ke(g2)
+        txt += tao_bang_so_sanh("2. DO THI VO HUONG (Undirected)", V, E_vo_huong, kq2)
 
+    txt += "GHI CHU:\n"
+    txt += " - Thoi gian chay bao gom ca thoi gian sinh ra cac trang thai mo phong (yield).\n"
+    txt += " - Gia tri ly thuyet la con so uoc luong dua tren cong thuc Big O.\n"
+    
     return txt
 
 def so_sanh_thuat_toan(danh_sach_nut):
