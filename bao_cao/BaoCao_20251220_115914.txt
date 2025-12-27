@@ -1,0 +1,50 @@
+CHE_DO: CO_HUONG
+SO_NUT: 8
+0 214 571
+1 211 308
+2 865 569
+3 374 311
+4 704 310
+5 702 569
+6 377 572
+7 866 311
+CANH:
+0 6 12
+0 5 15
+1 0 12
+1 4 10
+2 7 9
+2 6 16
+3 1 9
+3 0 10
+4 2 9
+4 3 7
+5 2 2
+5 7 18
+6 3 16
+6 5 19
+7 4 3
+KET_THUC_DU_LIEU
+
+============================================
+         BAO CAO SO SANH THUAT TOAN         
+============================================
+BAO CAO KET QUA
+Thoi gian: 2025-12-20 11:59:14
+--------------------------------------------------
+
+--- 1. CO HUONG ---
+[BFS]
+  - So buoc: 9 | Chi phi: 33 | Duong di: 0 -> 5 -> 7
+[DFS]
+  - So buoc: 9 | Chi phi: 65 | Duong di: 0 -> 6 -> 3 -> 1 -> 4 -> 2 -> 7
+[Dijkstra]
+  - So buoc: 9 | Chi phi: 26 | Duong di: 0 -> 5 -> 2 -> 7
+
+--- 2. VO HUONG ---
+[BFS]
+  - So buoc: 9 | Chi phi: 33 | Duong di: 0 -> 5 -> 7
+[DFS]
+  - So buoc: 9 | Chi phi: 37 | Duong di: 0 -> 6 -> 2 -> 7
+[Dijkstra]
+  - So buoc: 9 | Chi phi: 20 | Duong di: 0 -> 3 -> 4 -> 7
