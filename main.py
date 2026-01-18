@@ -3,7 +3,7 @@ import pygame
 import sys
 import math
 import os
-import time  
+import time
 from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog
@@ -14,74 +14,92 @@ from algorithms import chay_bfs, chay_dijkstra, chay_dfs, lay_ket_qua_duong_di
 
 # --- Logic tao bao cao ---
 
+
 def chay_thong_ke(danh_sach_nut):
     # --- BFS ---
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_bfs(danh_sach_nut[0])
     buoc1 = 0
-    start_time = time.perf_counter() 
+    start_time = time.perf_counter()
     try:
-        while True: next(bo_sinh); buoc1 += 1
-    except StopIteration: pass
-    end_time = time.perf_counter() 
-    t1 = (end_time - start_time) * 1000 
+        while True:
+            next(bo_sinh)
+            buoc1 += 1
+    except StopIteration:
+        pass
+    end_time = time.perf_counter()
+    t1 = (end_time - start_time) * 1000
     cp1, duong1 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     # --- DFS ---
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_dfs(danh_sach_nut[0])
     buoc2 = 0
     start_time = time.perf_counter()
     try:
-        while True: next(bo_sinh); buoc2 += 1
-    except StopIteration: pass
+        while True:
+            next(bo_sinh)
+            buoc2 += 1
+    except StopIteration:
+        pass
     end_time = time.perf_counter()
     t2 = (end_time - start_time) * 1000
     cp2, duong2 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     # --- Dijkstra ---
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_dijkstra(danh_sach_nut[0])
     buoc3 = 0
     start_time = time.perf_counter()
     try:
-        while True: next(bo_sinh); buoc3 += 1
-    except StopIteration: pass
+        while True:
+            next(bo_sinh)
+            buoc3 += 1
+    except StopIteration:
+        pass
     end_time = time.perf_counter()
     t3 = (end_time - start_time) * 1000
     cp3, duong3 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     return buoc1, cp1, duong1, t1, buoc2, cp2, duong2, t2, buoc3, cp3, duong3, t3
+
 
 def tao_noi_dung_bao_cao(danh_sach_nut):
     du_lieu = [str(len(danh_sach_nut))]
     for u in danh_sach_nut:
-        for v, w in u.danh_sach_ke: du_lieu.append(f"{u.ma_so} {v.ma_so} {w}")
+        for v, w in u.danh_sach_ke:
+            du_lieu.append(f"{u.ma_so} {v.ma_so} {w}")
     du_lieu_tho = "\n".join(du_lieu)
-    
+
     txt = "========================================================\n"
     txt += "              BAO CAO PHAN TICH THUAT TOAN              \n"
     txt += "========================================================\n"
     txt += f"Thoi gian xuat: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
-    
+
     def tao_bang_so_sanh(tieu_de_do_thi, V, E, ket_qua_chay):
         s1, c1, p1, t1, s2, c2, p2, t2, s3, c3, p3, t3 = ket_qua_chay
-        
+
         val_bfs_dfs = V + E
         val_dijkstra = (V + E) * math.log2(V) if V > 0 else 0
-        
+
         bang = f"--- {tieu_de_do_thi} ---\n"
         bang += f"Thong so: So Dinh (V) = {V} | So Canh (E) = {E}\n"
         bang += "-"*100 + "\n"
         bang += f"{'Tieu chi':<20} | {'BFS (Queue)':<22} | {'DFS (Stack)':<22} | {'Dijkstra (Heap)':<22}\n"
         bang += "-"*100 + "\n"
-        
+
         bang += f"{'Do phuc tap (Big O)':<20} | {'O(V + E)':<22} | {'O(V + E)':<22} | {'O((V+E)logV)':<22}\n"
-        bang += f"{'Gia tri Ly thuyet':<20} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_dijkstra:.1f} phep tinh':<22}\n"
-        bang += f"{'Thoi gian chay':<20} | {f'{t1:.4f} ms':<22} | {f'{t2:.4f} ms':<22} | {f'{t3:.4f} ms':<22}\n"
-        bang += f"{'So buoc mo phong':<20} | {f'{s1} buoc':<22} | {f'{s2} buoc':<22} | {f'{s3} buoc':<22}\n"
+        bang += f"{'Gia tri Ly thuyet':<20} | {f'~ {val_bfs_dfs} phep tinh':<22} | {
+            f'~ {val_bfs_dfs} phep tinh':<22} | {f'~ {val_dijkstra:.1f} phep tinh':<22}\n"
+        bang += f"{'Thoi gian chay':<20} | {f'{t1:.4f} ms':<22} | {
+            f'{t2:.4f} ms':<22} | {f'{t3:.4f} ms':<22}\n"
+        bang += f"{'So buoc mo phong':<20} | {f'{s1} buoc':<22} | {
+            f'{s2} buoc':<22} | {f'{s3} buoc':<22}\n"
         bang += f"{'Tong chi phi':<20} | {f'{c1}':<22} | {f'{c2}':<22} | {f'{c3}':<22}\n"
-        
+
         bang += "-"*100 + "\n"
         bang += f"Duong di BFS     : {p1}\n"
         bang += f"Duong di DFS     : {p2}\n"
@@ -94,68 +112,85 @@ def tao_noi_dung_bao_cao(danh_sach_nut):
         E = sum([len(n.danh_sach_ke) for n in g1])
         kq1 = chay_thong_ke(g1)
         txt += tao_bang_so_sanh("1. DO THI CO HUONG (Directed)", V, E, kq1)
-        
+
     g2 = phan_tich_van_ban(du_lieu_tho)
     if g2:
         chuyen_thanh_vo_huong(g2)
         V = len(g2)
-        E_vo_huong = sum([len(n.danh_sach_ke) for n in g2]) 
+        E_vo_huong = sum([len(n.danh_sach_ke) for n in g2])
         kq2 = chay_thong_ke(g2)
-        txt += tao_bang_so_sanh("2. DO THI VO HUONG (Undirected)", V, E_vo_huong, kq2)
+        txt += tao_bang_so_sanh("2. DO THI VO HUONG (Undirected)",
+                                V, E_vo_huong, kq2)
 
     txt += "GHI CHU:\n"
     txt += " - Thoi gian chay bao gom ca thoi gian sinh ra cac trang thai mo phong (yield).\n"
     txt += " - Gia tri ly thuyet la con so uoc luong dua tren cong thuc Big O.\n"
-    
+
     return txt
+
 
 def so_sanh_thuat_toan(danh_sach_nut):
     # BFS
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_bfs(danh_sach_nut[0])
     buoc1 = 0
-    try: 
-        while True: next(bo_sinh); buoc1 += 1
-    except StopIteration: pass
+    try:
+        while True:
+            next(bo_sinh)
+            buoc1 += 1
+    except StopIteration:
+        pass
     cp1, duong1 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     # DFS
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_dfs(danh_sach_nut[0])
     buoc2 = 0
-    try: 
-        while True: next(bo_sinh); buoc2 += 1
-    except StopIteration: pass
+    try:
+        while True:
+            next(bo_sinh)
+            buoc2 += 1
+    except StopIteration:
+        pass
     cp2, duong2 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     # Dijkstra
-    for n in danh_sach_nut: n.dat_lai_trang_thai()
+    for n in danh_sach_nut:
+        n.dat_lai_trang_thai()
     bo_sinh = chay_dijkstra(danh_sach_nut[0])
     buoc3 = 0
-    try: 
-        while True: next(bo_sinh); buoc3 += 1
-    except StopIteration: pass
+    try:
+        while True:
+            next(bo_sinh)
+            buoc3 += 1
+    except StopIteration:
+        pass
     cp3, duong3 = lay_ket_qua_duong_di(danh_sach_nut)
-    
+
     return {'buoc': buoc1, 'chi_phi': cp1, 'duong_di': duong1}, \
            {'buoc': buoc2, 'chi_phi': cp2, 'duong_di': duong2}, \
            {'buoc': buoc3, 'chi_phi': cp3, 'duong_di': duong3}
 
+
 def main():
-    cua_so_an = tk.Tk(); cua_so_an.withdraw()
+    cua_so_an = tk.Tk()
+    cua_so_an.withdraw()
     pygame.init()
-    man_hinh = pygame.display.set_mode((CHIEU_RONG_CUA_SO, CHIEU_CAO_CUA_SO), pygame.RESIZABLE)
+    man_hinh = pygame.display.set_mode(
+        (CHIEU_RONG_CUA_SO, CHIEU_CAO_CUA_SO), pygame.RESIZABLE)
     pygame.display.set_caption("Do an: Mo phong BFS - DFS - Dijkstra")
     dong_ho = pygame.time.Clock()
-    
+
     font = pygame.font.SysFont('Arial', 16, bold=True)
     font_nhap = pygame.font.SysFont('Consolas', 14)
 
     trang_thai = CHE_DO_CHINH
-    co_huong = True 
+    co_huong = True
     danh_sach_nut = tao_do_thi_ngau_nhien(co_huong=co_huong)
-    du_lieu_du_phong = None 
-    
+    du_lieu_du_phong = None
+
     ds_nut_bam = [
         NutBam(30, 580, 70, 40, "BFS", MAU_XANH_DUONG),
         NutBam(110, 580, 70, 40, "DFS", MAU_TIM),
@@ -168,21 +203,30 @@ def main():
         NutBam(270, 630, 120, 40, "Chon File BC", (128, 0, 128))
     ]
 
-    bo_sinh_du_lieu = None; lich_su_chay = []; cuon_bang = 0; duong_di_ket_qua = []
-    ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; nut_dang_keo = None; dang_di_chuyen_man_hinh = False; chuot_cu = (0, 0)
+    bo_sinh_du_lieu = None
+    lich_su_chay = []
+    cuon_bang = 0
+    duong_di_ket_qua = []
+    ti_le_zoom = 1.0
+    lech_x = 0
+    lech_y = 0
+    nut_dang_keo = None
+    dang_di_chuyen_man_hinh = False
+    chuot_cu = (0, 0)
     hien_bang_so_sanh = False
     kq_bfs = kq_dfs = kq_dijk = None
-    rect_dong = None # Bien luu vi tri nut dong
+    rect_dong = None  # Bien luu vi tri nut dong
 
     hop_nhap = HopNhapLieu(50, 80, 400, 500, font_nhap)
     hop_nhap.dat_noi_dung("5\n0 1 5\n1 2 3\n2 3 1\n3 4 7\n4 0 2")
-    
+
     nut_nap = NutBam(50, 600, 120, 40, "NAP DO THI", MAU_XANH_LA)
     nut_random = NutBam(185, 600, 130, 40, "NGAU NHIEN", MAU_TIM)
     nut_quay_lai = NutBam(330, 600, 120, 40, "QUAY LAI", MAU_DO)
-    
-    ds_nut_lich_su = []; cuon_lich_su = 0
-    
+
+    ds_nut_lich_su = []
+    cuon_lich_su = 0
+
     def cap_nhat_giao_dien_lich_su():
         nonlocal ds_nut_lich_su
         du_lieu_tho = lay_lich_su_nhap()
@@ -191,45 +235,59 @@ def main():
         for i, t in enumerate(du_lieu_tho):
             nhan = f"Input {i+1}: " + (t.split('\n')[0] if t else "Rong")
             b = NutBam(500, y + i * 50, 300, 40, nhan, MAU_XAM)
-            b.gia_tri_an = t 
+            b.gia_tri_an = t
             ds_nut_lich_su.append(b)
     cap_nhat_giao_dien_lich_su()
-    
+
     def ve_man_hinh_chinh(nut_hover=None):
-        man_hinh.set_clip(None); man_hinh.fill(MAU_TRANG); W, H = man_hinh.get_size()
-        
-        for i, b in enumerate(ds_nut_bam): 
-            if i < 6: b.hinh_chu_nhat.y = H - 110 
-            else: b.hinh_chu_nhat.y = H - 60      
-        
-        ve_toan_bo_do_thi(man_hinh, danh_sach_nut, font, co_huong, duong_di_ket_qua, nut_hover, ti_le_zoom, (lech_x, lech_y))
-        
-        pygame.draw.rect(man_hinh, (240,240,240), (0, H-120, 650, 120), border_top_right_radius=20) 
-        for b in ds_nut_bam: b.ve(man_hinh)
-        
+        man_hinh.set_clip(None)
+        man_hinh.fill(MAU_TRANG)
+        W, H = man_hinh.get_size()
+
+        for i, b in enumerate(ds_nut_bam):
+            if i < 6:
+                b.hinh_chu_nhat.y = H - 110
+            else:
+                b.hinh_chu_nhat.y = H - 60
+
+        ve_toan_bo_do_thi(man_hinh, danh_sach_nut, font, co_huong,
+                          duong_di_ket_qua, nut_hover, ti_le_zoom, (lech_x, lech_y))
+
+        pygame.draw.rect(man_hinh, (240, 240, 240), (0, H-120,
+                         650, 120), border_top_right_radius=20)
+        for b in ds_nut_bam:
+            b.ve(man_hinh)
+
         lbl = f"Do thi {'CO HUONG' if co_huong else 'VO HUONG'} ({len(danh_sach_nut)} dinh)"
         man_hinh.blit(font.render(lbl, True, MAU_DEN), (30, H - 140))
-        
+
         chieu_cao_bang = ve_bang_ket_qua(man_hinh, lich_su_chay, cuon_bang)
-        
+
         rect_nut_dong_local = None
-        if hien_bang_so_sanh and kq_bfs: 
-            rect_nut_dong_local = hien_cua_so_so_sanh(man_hinh, kq_bfs, kq_dfs, kq_dijk)
-        
+        if hien_bang_so_sanh and kq_bfs:
+            rect_nut_dong_local = hien_cua_so_so_sanh(
+                man_hinh, kq_bfs, kq_dfs, kq_dijk)
+
         pygame.display.flip()
         return chieu_cao_bang, rect_nut_dong_local
 
     def ve_man_hinh_nhap():
         man_hinh.fill(MAU_NEN_NHAP)
-        man_hinh.blit(font.render("NHAP DU LIEU (So Dinh [enter] U V W [enter]...)", True, MAU_DEN), (50, 40))
+        man_hinh.blit(font.render(
+            "NHAP DU LIEU (So Dinh [enter] U V W [enter]...)", True, MAU_DEN), (50, 40))
         hop_nhap.ve(man_hinh)
-        nut_nap.ve(man_hinh); nut_random.ve(man_hinh); nut_quay_lai.ve(man_hinh)
-        man_hinh.blit(font.render("LICH SU (Click chon)", True, MAU_XANH_DUONG), (500, 40))
+        nut_nap.ve(man_hinh)
+        nut_random.ve(man_hinh)
+        nut_quay_lai.ve(man_hinh)
+        man_hinh.blit(font.render("LICH SU (Click chon)",
+                      True, MAU_XANH_DUONG), (500, 40))
         W, H = man_hinh.get_size()
         man_hinh.set_clip(pygame.Rect(490, 70, 350, H - 100))
         for b in ds_nut_lich_su:
-            oy = b.hinh_chu_nhat.y; b.hinh_chu_nhat.y += cuon_lich_su
-            b.ve(man_hinh); b.hinh_chu_nhat.y = oy
+            oy = b.hinh_chu_nhat.y
+            b.hinh_chu_nhat.y += cuon_lich_su
+            b.ve(man_hinh)
+            b.hinh_chu_nhat.y = oy
         man_hinh.set_clip(None)
         pygame.draw.line(man_hinh, MAU_VIEN_BANG, (480, 50), (480, H-50), 2)
         pygame.display.flip()
@@ -238,166 +296,245 @@ def main():
     while dang_chay:
         cac_su_kien = pygame.event.get()
         for e in cac_su_kien:
-            if e.type == pygame.QUIT: dang_chay = False
-            
+            if e.type == pygame.QUIT:
+                dang_chay = False
+
             if trang_thai == CHE_DO_NHAP_LIEU:
                 hop_nhap.xu_ly_su_kien(e)
                 if e.type == pygame.MOUSEWHEEL and pygame.mouse.get_pos()[0] > 480:
                     cuon_lich_su = min(0, cuon_lich_su + e.y * 20)
                 if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
-                    if nut_quay_lai.duoc_nhan(e.pos): trang_thai = CHE_DO_CHINH
+                    if nut_quay_lai.duoc_nhan(e.pos):
+                        trang_thai = CHE_DO_CHINH
                     elif nut_nap.duoc_nhan(e.pos):
                         txt = hop_nhap.lay_noi_dung()
                         g = phan_tich_van_ban(txt)
                         if g:
-                            danh_sach_nut = g; luu_lich_su_nhap(txt); cap_nhat_giao_dien_lich_su()
-                            bo_sinh_du_lieu = None; lich_su_chay = []; duong_di_ket_qua = []
-                            ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; trang_thai = CHE_DO_CHINH
-                            du_lieu_du_phong = None 
-                        else: print("Loi dinh dang!")
-                    elif nut_random.duoc_nhan(e.pos): hop_nhap.dat_noi_dung(tao_du_lieu_ngau_nhien_dang_chu())
+                            danh_sach_nut = g
+                            luu_lich_su_nhap(txt)
+                            cap_nhat_giao_dien_lich_su()
+                            bo_sinh_du_lieu = None
+                            lich_su_chay = []
+                            duong_di_ket_qua = []
+                            ti_le_zoom = 1.0
+                            lech_x = 0
+                            lech_y = 0
+                            trang_thai = CHE_DO_CHINH
+                            du_lieu_du_phong = None
+                        else:
+                            print("Loi dinh dang!")
+                    elif nut_random.duoc_nhan(e.pos):
+                        hop_nhap.dat_noi_dung(
+                            tao_du_lieu_ngau_nhien_dang_chu())
                     else:
                         for b in ds_nut_lich_su:
-                            kiem_tra = b.hinh_chu_nhat.copy(); kiem_tra.y += cuon_lich_su
-                            if kiem_tra.collidepoint(e.pos): hop_nhap.dat_noi_dung(b.gia_tri_an); break
+                            kiem_tra = b.hinh_chu_nhat.copy()
+                            kiem_tra.y += cuon_lich_su
+                            if kiem_tra.collidepoint(e.pos):
+                                hop_nhap.dat_noi_dung(b.gia_tri_an)
+                                break
 
             elif trang_thai == CHE_DO_CHINH:
                 if hien_bang_so_sanh:
                     if e.type == pygame.MOUSEBUTTONDOWN and e.button == 1:
                         if rect_dong and rect_dong.collidepoint(e.pos):
                             hien_bang_so_sanh = False
-                            for n in danh_sach_nut: n.dat_lai_trang_thai() 
+                            for n in danh_sach_nut:
+                                n.dat_lai_trang_thai()
                             duong_di_ket_qua = []
-                    continue 
-                
+                    continue
+
                 mx, my = pygame.mouse.get_pos()
                 wx = (mx - lech_x) / ti_le_zoom
                 wy = (my - lech_y) / ti_le_zoom
-                
+
                 nut_hover = None
-                if nut_dang_keo: nut_hover = nut_dang_keo
+                if nut_dang_keo:
+                    nut_hover = nut_dang_keo
                 else:
                     for n in danh_sach_nut:
-                        if math.hypot(wx - n.x, wy - n.y) <= BAN_KINH_NUT: nut_hover = n; break
+                        if math.hypot(wx - n.x, wy - n.y) <= BAN_KINH_NUT:
+                            nut_hover = n
+                            break
 
-                if e.type == pygame.VIDEORESIZE: man_hinh = pygame.display.set_mode((e.w, e.h), pygame.RESIZABLE)
-                
+                if e.type == pygame.VIDEORESIZE:
+                    man_hinh = pygame.display.set_mode(
+                        (e.w, e.h), pygame.RESIZABLE)
+
                 if e.type == pygame.MOUSEWHEEL:
                     if mx < man_hinh.get_size()[0] - 450:
                         s = 1.1 if e.y > 0 else 0.9
                         ti_le_zoom = max(0.2, min(5.0, ti_le_zoom * s))
-                        lech_x = mx - wx * ti_le_zoom; lech_y = my - wy * ti_le_zoom
-                    else: cuon_bang += e.y * 20
+                        lech_x = mx - wx * ti_le_zoom
+                        lech_y = my - wy * ti_le_zoom
+                    else:
+                        cuon_bang += e.y * 20
 
                 if e.type == pygame.MOUSEBUTTONDOWN:
-                    if e.button == 1: 
+                    if e.button == 1:
                         da_click_nut = False
                         for i, b in enumerate(ds_nut_bam):
                             if b.duoc_nhan(e.pos):
                                 da_click_nut = True
-                                
+
                                 # 5: Lam Moi
-                                if i == 5: 
-                                    danh_sach_nut = tao_do_thi_ngau_nhien(co_huong=co_huong)
-                                    bo_sinh_du_lieu = None; lich_su_chay = []; cuon_bang = 0; duong_di_ket_qua = []
-                                    ti_le_zoom = 1.0; lech_x = 0; lech_y = 0; du_lieu_du_phong = None
-                                
+                                if i == 5:
+                                    danh_sach_nut = tao_do_thi_ngau_nhien(
+                                        co_huong=co_huong)
+                                    bo_sinh_du_lieu = None
+                                    lich_su_chay = []
+                                    cuon_bang = 0
+                                    duong_di_ket_qua = []
+                                    ti_le_zoom = 1.0
+                                    lech_x = 0
+                                    lech_y = 0
+                                    du_lieu_du_phong = None
+
                                 # 4: Kieu (Co Huong <-> Vo Huong)
                                 elif i == 4:
                                     co_huong = not co_huong
-                                    if not co_huong: 
-                                        du_lieu_du_phong = sao_chep_do_thi(danh_sach_nut)
-                                        danh_sach_nut = chuyen_thanh_vo_huong(danh_sach_nut)
+                                    if not co_huong:
+                                        du_lieu_du_phong = sao_chep_do_thi(
+                                            danh_sach_nut)
+                                        danh_sach_nut = chuyen_thanh_vo_huong(
+                                            danh_sach_nut)
                                         ds_nut_bam[4].noi_dung = "Kieu: Vo Huong"
-                                    else: 
+                                    else:
                                         if du_lieu_du_phong:
-                                            danh_sach_nut = khoi_phuc_do_thi(du_lieu_du_phong, danh_sach_nut)
+                                            danh_sach_nut = khoi_phuc_do_thi(
+                                                du_lieu_du_phong, danh_sach_nut)
                                         else:
-                                            danh_sach_nut = chuyen_thanh_co_huong(danh_sach_nut)
+                                            danh_sach_nut = chuyen_thanh_co_huong(
+                                                danh_sach_nut)
                                         ds_nut_bam[4].noi_dung = "Kieu: Co Huong"
-                                    
-                                    for n in danh_sach_nut: n.dat_lai_trang_thai()
-                                    bo_sinh_du_lieu = None; lich_su_chay = []; duong_di_ket_qua = []
-                                
+
+                                    for n in danh_sach_nut:
+                                        n.dat_lai_trang_thai()
+                                    bo_sinh_du_lieu = None
+                                    lich_su_chay = []
+                                    duong_di_ket_qua = []
+
                                 # 6: Nhap Tay
                                 elif i == 6:
-                                    trang_thai = CHE_DO_NHAP_LIEU; cap_nhat_giao_dien_lich_su()
-                                
+                                    trang_thai = CHE_DO_NHAP_LIEU
+                                    cap_nhat_giao_dien_lich_su()
+
                                 # 3: So Sanh
                                 elif i == 3:
-                                    kq_bfs, kq_dfs, kq_dijk = so_sanh_thuat_toan(danh_sach_nut)
-                                    hien_bang_so_sanh = True; bo_sinh_du_lieu = None; duong_di_ket_qua = []
-                                
+                                    kq_bfs, kq_dfs, kq_dijk = so_sanh_thuat_toan(
+                                        danh_sach_nut)
+                                    hien_bang_so_sanh = True
+                                    bo_sinh_du_lieu = None
+                                    duong_di_ket_qua = []
+
                                 # 7: Xuat Bao Cao
                                 elif i == 7:
                                     thu_muc = "bao_cao"
-                                    if not os.path.exists(thu_muc): os.makedirs(thu_muc)
+                                    if not os.path.exists(thu_muc):
+                                        os.makedirs(thu_muc)
                                     t = datetime.now().strftime("%Y%m%d_%H%M%S")
                                     ten_file = f"{thu_muc}/BaoCao_{t}.txt"
-                                    noi_dung = tao_noi_dung_bao_cao(danh_sach_nut)
+                                    noi_dung = tao_noi_dung_bao_cao(
+                                        danh_sach_nut)
                                     if luu_file_day_du(ten_file, danh_sach_nut, co_huong, noi_dung):
-                                        lich_su_chay.append(f">> DA LUU: {ten_file}")
-                                        try: os.startfile(thu_muc)
-                                        except: pass
-                                    else: lich_su_chay.append(">> LOI LUU FILE!")
+                                        lich_su_chay.append(
+                                            f">> DA LUU: {ten_file}")
+                                        try:
+                                            os.startfile(thu_muc)
+                                        except:
+                                            pass
+                                    else:
+                                        lich_su_chay.append(">> LOI LUU FILE!")
                                     cuon_bang = -99999
 
                                 # 8: Chon File BC
                                 elif i == 8:
                                     fd = "bao_cao"
-                                    if not os.path.exists(fd): os.makedirs(fd)
-                                    duong_dan = filedialog.askopenfilename(initialdir=fd, filetypes=(("Text", "*.txt"), ("All", "*.*")))
+                                    if not os.path.exists(fd):
+                                        os.makedirs(fd)
+                                    duong_dan = filedialog.askopenfilename(
+                                        initialdir=fd, filetypes=(("Text", "*.txt"), ("All", "*.*")))
                                     if duong_dan:
                                         gn, mode = doc_file_day_du(duong_dan)
                                         if gn:
-                                            danh_sach_nut = gn; co_huong = mode
+                                            danh_sach_nut = gn
+                                            co_huong = mode
                                             ds_nut_bam[4].noi_dung = "Kieu: Co Huong" if co_huong else "Kieu: Vo Huong"
-                                            bo_sinh_du_lieu = None; lich_su_chay = []; duong_di_ket_qua = []
+                                            bo_sinh_du_lieu = None
+                                            lich_su_chay = []
+                                            duong_di_ket_qua = []
                                             du_lieu_du_phong = None
-                                            lich_su_chay.append(f">> DA NAP: {os.path.basename(duong_dan)}")
-                                        else: lich_su_chay.append(">> FILE LOI!")
-                                    else: lich_su_chay.append(">> DA HUY")
+                                            lich_su_chay.append(
+                                                f">> DA NAP: {os.path.basename(duong_dan)}")
+                                        else:
+                                            lich_su_chay.append(">> FILE LOI!")
+                                    else:
+                                        lich_su_chay.append(">> DA HUY")
                                     cuon_bang = -99999
 
                                 # 0, 1, 2: Cac Thuat Toan
                                 elif bo_sinh_du_lieu is None:
-                                    for n in danh_sach_nut: n.dat_lai_trang_thai() 
+                                    for n in danh_sach_nut:
+                                        n.dat_lai_trang_thai()
                                     duong_di_ket_qua = []
-                                    if i == 0: bo_sinh_du_lieu = chay_bfs(danh_sach_nut[0])
-                                    elif i == 1: bo_sinh_du_lieu = chay_dfs(danh_sach_nut[0])
-                                    elif i == 2: bo_sinh_du_lieu = chay_dijkstra(danh_sach_nut[0])
+                                    if i == 0:
+                                        bo_sinh_du_lieu = chay_bfs(
+                                            danh_sach_nut[0])
+                                    elif i == 1:
+                                        bo_sinh_du_lieu = chay_dfs(
+                                            danh_sach_nut[0])
+                                    elif i == 2:
+                                        bo_sinh_du_lieu = chay_dijkstra(
+                                            danh_sach_nut[0])
                                 break
-                        if not da_click_nut and nut_hover: nut_dang_keo = nut_hover
-                    elif e.button == 3: dang_di_chuyen_man_hinh = True; chuot_cu = e.pos
+                        if not da_click_nut and nut_hover:
+                            nut_dang_keo = nut_hover
+                    elif e.button == 3:
+                        dang_di_chuyen_man_hinh = True
+                        chuot_cu = e.pos
 
                 if e.type == pygame.MOUSEBUTTONUP:
-                    if e.button == 1: nut_dang_keo = None
-                    if e.button == 3: dang_di_chuyen_man_hinh = False
+                    if e.button == 1:
+                        nut_dang_keo = None
+                    if e.button == 3:
+                        dang_di_chuyen_man_hinh = False
 
                 if e.type == pygame.MOUSEMOTION:
                     if nut_dang_keo:
                         nut_dang_keo.x = (e.pos[0] - lech_x) / ti_le_zoom
                         nut_dang_keo.y = (e.pos[1] - lech_y) / ti_le_zoom
                     if dang_di_chuyen_man_hinh:
-                        dx = e.pos[0] - chuot_cu[0]; dy = e.pos[1] - chuot_cu[1]
-                        lech_x += dx; lech_y += dy; chuot_cu = e.pos
+                        dx = e.pos[0] - chuot_cu[0]
+                        dy = e.pos[1] - chuot_cu[1]
+                        lech_x += dx
+                        lech_y += dy
+                        chuot_cu = e.pos
 
                 if e.type == pygame.KEYDOWN and e.key == pygame.K_SPACE and bo_sinh_du_lieu:
                     try:
-                        hang = next(bo_sinh_du_lieu); lich_su_chay.append(hang); cuon_bang = -99999
+                        hang = next(bo_sinh_du_lieu)
+                        lich_su_chay.append(hang)
+                        cuon_bang = -99999
                     except StopIteration:
-                        bo_sinh_du_lieu = None; dich = danh_sach_nut[-1]
+                        bo_sinh_du_lieu = None
+                        dich = danh_sach_nut[-1]
                         c, p = lay_ket_qua_duong_di(danh_sach_nut)
                         duong_di_ket_qua = []
                         tam = dich
-                        while tam: duong_di_ket_qua.append(tam); tam = tam.nut_cha
-                        lich_su_chay.append(f"KET QUA: {p} (Chi phi: {c})"); cuon_bang = -99999
+                        while tam:
+                            duong_di_ket_qua.append(tam)
+                            tam = tam.nut_cha
+                        lich_su_chay.append(f"KET QUA: {p} (Chi phi: {c})")
+                        cuon_bang = -99999
 
         if trang_thai == CHE_DO_CHINH:
-            cao_bang, rect_dong = ve_man_hinh_chinh(nut_hover if trang_thai == CHE_DO_CHINH else None)
+            cao_bang, rect_dong = ve_man_hinh_chinh(
+                nut_hover if trang_thai == CHE_DO_CHINH else None)
             _, ch = man_hinh.get_size()
-            if cao_bang < (ch - 40): cuon_bang = 0
-            elif cuon_bang < -(cao_bang - (ch-40) + 20): cuon_bang = -(cao_bang - (ch-40) + 20)
+            if cao_bang < (ch - 40):
+                cuon_bang = 0
+            elif cuon_bang < -(cao_bang - (ch-40) + 20):
+                cuon_bang = -(cao_bang - (ch-40) + 20)
         elif trang_thai == CHE_DO_NHAP_LIEU:
             ve_man_hinh_nhap()
 
@@ -405,6 +542,7 @@ def main():
 
     pygame.quit()
     sys.exit()
+
 
 if __name__ == "__main__":
     main()

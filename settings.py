@@ -1,7 +1,7 @@
 # settings.py
 
 # Kich thuoc cua so ung dung
-CHIEU_RONG_CUA_SO = 1400 
+CHIEU_RONG_CUA_SO = 1400
 CHIEU_CAO_CUA_SO = 750
 
 # Thong so ve
@@ -11,12 +11,12 @@ CO_CHU = 16
 # Bang mau (R, G, B)
 MAU_TRANG = (255, 255, 255)
 MAU_DEN = (50, 50, 50)
-MAU_XANH_DUONG = (50, 150, 255) 
-MAU_VANG = (255, 200, 0)        
-MAU_XAM = (220, 220, 220)       
-MAU_DO = (255, 50, 50)          
-MAU_XANH_LA = (50, 200, 50)     
-MAU_TIM = (180, 50, 200)        
+MAU_XANH_DUONG = (50, 150, 255)
+MAU_VANG = (255, 200, 0)
+MAU_XAM = (220, 220, 220)
+MAU_DO = (255, 50, 50)
+MAU_XANH_LA = (50, 200, 50)
+MAU_TIM = (180, 50, 200)
 
 # Mau cho bang hien ket qua
 MAU_NEN_BANG = (245, 245, 250)
